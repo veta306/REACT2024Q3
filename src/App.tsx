@@ -4,6 +4,7 @@ import SearchSection from "./components/SearchSection";
 import fetchFilms from "./api";
 import Spinner from "./components/Spinner";
 import Film from "./types/Film";
+import ResultSection from "./components/ResultSection";
 
 interface Props {
   children?: ReactNode;
@@ -24,7 +25,8 @@ export default class App extends Component<Props, State> {
   async search() {
     localStorage.setItem("searchPhrase", this.state.searchPhrase);
     this.setState({ isLoading: true });
-    await fetchFilms(this.state.searchPhrase);
+    const films = await fetchFilms(this.state.searchPhrase);
+    this.setState({ films: films });
     this.setState({ isLoading: false });
   }
   componentDidMount() {
@@ -41,6 +43,7 @@ export default class App extends Component<Props, State> {
             this.setState({ searchPhrase: searchPhrase })
           }
         />
+        <ResultSection films={this.state.films} />
         <Spinner isLoading={this.state.isLoading} />
       </ErrorBoundary>
     );

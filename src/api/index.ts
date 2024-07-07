@@ -1,6 +1,9 @@
 const URL = "https://swapi.dev/api/films/";
 
 export default async function fetchFilms(searchPhrase: string) {
-  if (searchPhrase) return await fetch(URL + "?search=" + searchPhrase);
-  return await fetch(URL);
+  const result = searchPhrase
+    ? await fetch(URL + "?search=" + searchPhrase)
+    : await fetch(URL);
+  const films = await result.json();
+  return films.results;
 }
