@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Film from "../../types/Film";
+import "./ResultSection.css";
 
 interface Props {
   films: Film[];
@@ -8,13 +9,14 @@ interface Props {
 export default class ResultSection extends Component<Props> {
   render() {
     return (
-      <div>
+      <div className="result-container">
         {this.props.films.map((film) => (
-          <>
-            <div>{film.title}</div>
-            <div>{film.opening_crawl}</div>
-          </>
+          <div key={film.title} className="film-card">
+            <div className="film-title">{film.title}</div>
+            <div className="film-description">{film.opening_crawl}</div>
+          </div>
         ))}
+        {this.props.films.length === 0 && <h1>No search results</h1>}
       </div>
     );
   }
