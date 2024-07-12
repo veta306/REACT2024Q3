@@ -1,51 +1,38 @@
-import { Component, ReactNode } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { FC, useEffect, useState } from "react";
 import SearchSection from "./components/SearchSection";
-import fetchFilms from "./api";
+import CardList from "./components/CardList";
 import Spinner from "./components/Spinner";
+import fetchFilms from "./api";
 import Film from "./types/Film";
-import ResultSection from "./components/ResultSection";
 
-interface Props {
-  children?: ReactNode;
-}
+const App: FC = () => {
+  const [searchPhrase, setSearchPhrase] = useState(
+    localStorage.getItem("searchPhrase") || "",
+  );
+  const [films, setFilms] = useState<Film[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-interface State {
-  films: Film[];
-  searchPhrase: string;
-  isLoading: boolean;
-}
+  useEffect(() => {
+    const search = async () => {
+      localStorage.setItem("searchPhrase", searchPhrase);
+      setIsLoading(true);
+      const films = await fetchFilms(searchPhrase);
+      setFilms(films);
+      setIsLoading(false);
+    };
+    search();
+  }, [searchPhrase]);
 
-export default class App extends Component<Props, State> {
-  state: State = {
-    films: [],
-    searchPhrase: localStorage.getItem("searchPhrase") || "",
-    isLoading: false,
-  };
-  async search() {
-    localStorage.setItem("searchPhrase", this.state.searchPhrase);
-    this.setState({ isLoading: true });
-    const films = await fetchFilms(this.state.searchPhrase);
-    this.setState({ films: films });
-    this.setState({ isLoading: false });
-  }
-  componentDidMount() {
-    this.search();
-  }
-  componentDidUpdate(_: Props, prevState: State) {
-    if (prevState.searchPhrase !== this.state.searchPhrase) this.search();
-  }
-  render() {
-    return (
-      <ErrorBoundary>
-        <SearchSection
-          search={(searchPhrase: string) =>
-            this.setState({ searchPhrase: searchPhrase })
-          }
-        />
-        <ResultSection films={this.state.films} />
-        <Spinner isLoading={this.state.isLoading} />
-      </ErrorBoundary>
-    );
-  }
-}
+  return (
+    <>
+      <SearchSection
+        searchPhrase={searchPhrase}
+        setSearchPhrase={setSearchPhrase}
+      />
+      <CardList films={films} />
+      <Spinner isLoading={isLoading} />
+    </>
+  );
+};
+
+export default App;
