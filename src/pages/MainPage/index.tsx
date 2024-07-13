@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
-import SearchSection from "./components/SearchSection";
-import CardList from "./components/CardList";
-import Spinner from "./components/Spinner";
-import fetchFilms from "./api";
-import Film from "./types/Film";
-import useSearchPhrase from "./hooks/useSearchPhrase";
+import useSearchPhrase from "../../hooks/useSearchPhrase";
+import Film from "../../types/Film";
+import fetchFilms from "../../api";
+import SearchSection from "../../components/SearchSection";
+import CardList from "../../components/CardList";
+import Spinner from "../../components/Spinner";
 
-const App: FC = () => {
+const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
   const [films, setFilms] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,10 +15,16 @@ const App: FC = () => {
     const search = async () => {
       setIsLoading(true);
       const films = await fetchFilms(searchPhrase);
-      setFilms(films);
       setIsLoading(false);
+      if (!ignore) {
+        setFilms(films);
+      }
     };
+    let ignore = false;
     search();
+    return () => {
+      ignore = true;
+    };
   }, [searchPhrase]);
 
   return (
@@ -33,4 +39,4 @@ const App: FC = () => {
   );
 };
 
-export default App;
+export default MainPage;
