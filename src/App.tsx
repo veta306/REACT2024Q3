@@ -4,17 +4,15 @@ import CardList from "./components/CardList";
 import Spinner from "./components/Spinner";
 import fetchFilms from "./api";
 import Film from "./types/Film";
+import useSearchPhrase from "./hooks/useSearchPhrase";
 
 const App: FC = () => {
-  const [searchPhrase, setSearchPhrase] = useState(
-    localStorage.getItem("searchPhrase") || "",
-  );
+  const [searchPhrase, setSearchPhrase] = useSearchPhrase();
   const [films, setFilms] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const search = async () => {
-      localStorage.setItem("searchPhrase", searchPhrase);
       setIsLoading(true);
       const films = await fetchFilms(searchPhrase);
       setFilms(films);
