@@ -5,12 +5,14 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import MainPage from "./pages/MainPage";
 import ErrorPage from "./pages/ErrorPage";
 import "./index.css";
+import DetailedCard from "./components/DetailedCard";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainPage />,
     errorElement: <ErrorPage />,
+    children: [{ index: true, element: <DetailedCard /> }],
   },
 ]);
 

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
 import { Person } from "../../types/Person";
-import fetchPeople from "../../api";
+import { fetchPeople } from "../../api";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import usePageNumber from "../../hooks/usePageNumber";

@@ -4,7 +4,6 @@ export type Person = {
   gender: string;
   hair_color: string;
   height: string;
-  homeworld: string;
   mass: string;
   name: string;
   skin_color: string;

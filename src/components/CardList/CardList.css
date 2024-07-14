@@ -1,7 +1,15 @@
-.cards-container {
+.card-list {
+  display: flex;
+  gap: 20px;
+}
+
+.cards {
+  flex-basis: calc(100% / 2);
+  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  transition: all 0.5s ease;
 }
