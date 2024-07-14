@@ -46,11 +46,11 @@ const DetailedCard: FC = () => {
               <button className="close-button" onClick={handleClose}>
                 ×
               </button>
+              <h1>{person.name}</h1>
               <img
                 src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
                 alt="person photo"
               />
-              <h1>{person.name}</h1>
               <p>Birth Year: {person.birth_year}</p>
               <p>Eye Color: {person.eye_color}</p>
               <p>Gender: {person.gender}</p>

@@ -1,8 +1,8 @@
 .details {
   top: 0;
   align-self: flex-start;
+  flex: 0 0 400px;
   position: sticky;
-  flex-basis: calc(100% / 5);
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
@@ -10,7 +10,7 @@
 
 .details h1 {
   font-size: 2em;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
 }
 
 .details p {
@@ -21,11 +21,12 @@
 .close-button {
   padding: 0;
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 28px;
+  right: 20px;
   background: none;
   border: none;
-  font-size: 2em;
+  border-radius: 50%;
+  font-size: 4em;
   line-height: 0.5em;
   cursor: pointer;
 }
