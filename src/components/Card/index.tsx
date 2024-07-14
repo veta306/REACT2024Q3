@@ -7,8 +7,13 @@ interface Props {
 }
 
 const Card: FC<Props> = ({ person }) => {
+  const id = person.url.match(/\/(\d+)\/$/)![1];
   return (
     <div className="card">
+      <img
+        src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
+        alt="person photo"
+      />
       <div className="name">{person.name}</div>
     </div>
   );

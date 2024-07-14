@@ -4,7 +4,6 @@ import { Person } from "../../types/Person";
 import fetchPeople from "../../api";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
-import Spinner from "../../components/Spinner";
 import usePageNumber from "../../hooks/usePageNumber";
 import Pagination from "../../components/Pagination";
 
@@ -19,8 +18,8 @@ const MainPage: FC = () => {
     const search = async () => {
       setIsLoading(true);
       const response = await fetchPeople(page, searchPhrase);
-      setIsLoading(false);
       if (!ignore) {
+        setIsLoading(false);
         setPersons(response.results);
         setHasNextPage(Boolean(response.next));
       }
@@ -41,13 +40,14 @@ const MainPage: FC = () => {
           setPage(1);
         }}
       />
-      <CardList persons={persons} />
-      <Pagination
-        currentPage={page}
-        hasNextPage={hasNextPage}
-        setPage={setPage}
-      />
-      <Spinner isLoading={isLoading} />
+      <CardList persons={persons} isLoading={isLoading} />
+      {!isLoading && persons.length !== 0 && (
+        <Pagination
+          currentPage={page}
+          hasNextPage={hasNextPage}
+          setPage={setPage}
+        />
+      )}
     </>
   );
 };

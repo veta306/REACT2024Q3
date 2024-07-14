@@ -1,11 +1,12 @@
 export type Person = {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
   birth_year: string;
+  eye_color: string;
   gender: string;
+  hair_color: string;
+  height: string;
   homeworld: string;
-  films: string[];
+  mass: string;
+  name: string;
+  skin_color: string;
+  url: string;
 };
