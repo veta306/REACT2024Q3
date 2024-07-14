@@ -8,10 +8,10 @@ interface ApiResponse {
   results: Film[];
 }
 
-export default async function fetchFilms(searchPhrase: string) {
-  const result = searchPhrase
-    ? await fetch(URL + "?search=" + searchPhrase)
-    : await fetch(URL);
-  const films: ApiResponse = await result.json();
-  return films.results;
+export default async function fetchFilms(page: number, searchPhrase: string) {
+  const url =
+    URL + `?page=${page}` + (searchPhrase ? `&search=${searchPhrase}` : "");
+  const result = await fetch(url);
+  const response: ApiResponse = await result.json();
+  return response;
 }

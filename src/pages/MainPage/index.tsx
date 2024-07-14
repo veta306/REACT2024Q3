@@ -5,19 +5,24 @@ import fetchFilms from "../../api";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import Spinner from "../../components/Spinner";
+import usePageNumber from "../../hooks/usePageNumber";
+import Pagination from "../../components/Pagination";
 
 const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
   const [films, setFilms] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = usePageNumber();
+  const [hasNextPage, setHasNextPage] = useState(false);
 
   useEffect(() => {
     const search = async () => {
       setIsLoading(true);
-      const films = await fetchFilms(searchPhrase);
+      const response = await fetchFilms(page, searchPhrase);
       setIsLoading(false);
       if (!ignore) {
-        setFilms(films);
+        setFilms(response.results);
+        setHasNextPage(Boolean(response.next));
       }
     };
     let ignore = false;
@@ -25,7 +30,7 @@ const MainPage: FC = () => {
     return () => {
       ignore = true;
     };
-  }, [searchPhrase]);
+  }, [page, searchPhrase]);
 
   return (
     <>
@@ -34,6 +39,11 @@ const MainPage: FC = () => {
         setSearchPhrase={setSearchPhrase}
       />
       <CardList films={films} />
+      <Pagination
+        currentPage={page}
+        hasNextPage={hasNextPage}
+        setPage={setPage}
+      />
       <Spinner isLoading={isLoading} />
     </>
   );
