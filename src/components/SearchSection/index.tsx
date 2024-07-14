@@ -1,57 +1,55 @@
-import { ChangeEvent, Component, FormEvent } from "react";
+import { FormEvent, useState, FC } from "react";
 import "./SearchSection.css";
 
 interface Props {
-  search: (searchPhrase: string) => void;
+  searchPhrase: string;
+  setSearchPhrase: (searchPhrase: string) => void;
+  closeDetailedCard: () => void;
 }
 
-interface State {
-  searchInput: string;
-  errorTriggered: boolean;
-}
+const SearchSection: FC<Props> = ({
+  searchPhrase,
+  setSearchPhrase,
+  closeDetailedCard,
+}) => {
+  const [searchInput, setSearchInput] = useState(searchPhrase);
+  const [errorTriggered, setErrorTriggered] = useState(false);
 
-export default class SearchSection extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      searchInput: localStorage.getItem("searchPhrase") || "",
-      errorTriggered: false,
-    };
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleInput(e: ChangeEvent<HTMLInputElement>) {
-    this.setState({ searchInput: e.target.value });
-  }
-  handleSubmit(e: FormEvent) {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    this.props.search(this.state.searchInput);
+    setSearchPhrase(searchInput);
+  };
+
+  if (errorTriggered) {
+    throw new Error("Something went wrong");
   }
-  render() {
-    if (this.state.errorTriggered) {
-      throw new Error("Something went wrong");
-    }
-    return (
-      <form className="search-form" onSubmit={this.handleSubmit}>
-        <input
-          className="search-input"
-          type="text"
-          onChange={this.handleInput}
-          value={this.state.searchInput}
-        />
-        <button className="search-button" type="submit">
-          Search
-        </button>
-        <button
-          className="error-button"
-          type="button"
-          onClick={() => {
-            this.setState({ errorTriggered: true });
-          }}
-        >
-          Throw error
-        </button>
-      </form>
-    );
-  }
-}
+
+  return (
+    <form
+      className="search-form"
+      onSubmit={handleSubmit}
+      onClick={closeDetailedCard}
+    >
+      <input
+        className="search-input"
+        type="text"
+        onChange={(e) => setSearchInput(e.target.value)}
+        value={searchInput}
+      />
+      <button className="search-button" type="submit">
+        Search
+      </button>
+      <button
+        className="error-button"
+        type="button"
+        onClick={() => {
+          setErrorTriggered(true);
+        }}
+      >
+        Throw error
+      </button>
+    </form>
+  );
+};
+
+export default SearchSection;

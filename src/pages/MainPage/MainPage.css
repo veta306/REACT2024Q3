@@ -1,0 +1,8 @@
+.main {
+  display: flex;
+  gap: 20px;
+}
+
+.main-panel {
+  flex: 0 1 100%;
+}

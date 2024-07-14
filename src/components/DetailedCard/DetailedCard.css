@@ -1,0 +1,37 @@
+.details {
+  top: 0;
+  align-self: flex-start;
+  flex: 0 0 400px;
+  position: sticky;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 80px;
+}
+
+.details h1 {
+  font-size: 2em;
+  margin: 0 0 10px;
+}
+
+.details p {
+  font-size: 1.2em;
+  margin: 5px 0;
+}
+
+.close-button {
+  padding: 0;
+  position: absolute;
+  top: 28px;
+  right: 20px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-size: 4em;
+  line-height: 0.5em;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: red;
+}
