@@ -1,7 +1,6 @@
 import { FC } from "react";
 import Card from "../Card";
 import { Person } from "../../types/Person";
-import { Outlet } from "react-router-dom";
 import Spinner from "../Spinner";
 import "./CardList.css";
 
@@ -13,14 +12,11 @@ const CardList: FC<Props> = ({ persons, isLoading }) => {
   return (
     <>
       {!isLoading && (
-        <div className="card-list">
-          <div className="cards">
-            {persons.map((person) => (
-              <Card key={person.name} person={person} />
-            ))}
-            {persons.length === 0 && <h1>No search results</h1>}
-          </div>
-          <Outlet />
+        <div className="cards">
+          {persons.map((person) => (
+            <Card key={person.name} person={person} />
+          ))}
+          {persons.length === 0 && <h1>No search results</h1>}
         </div>
       )}
       <Spinner isLoading={isLoading} />

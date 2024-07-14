@@ -34,7 +34,6 @@ const DetailedCard: FC = () => {
       prev.delete("details");
       return prev;
     });
-    searchParams.delete("details");
   };
 
   return (

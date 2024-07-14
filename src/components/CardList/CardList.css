@@ -1,11 +1,5 @@
-.card-list {
-  display: flex;
-  gap: 20px;
-}
-
 .cards {
   padding: 20px;
-  flex: 0 1 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

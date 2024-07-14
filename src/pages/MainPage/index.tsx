@@ -6,6 +6,8 @@ import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import usePageNumber from "../../hooks/usePageNumber";
 import Pagination from "../../components/Pagination";
+import { Outlet, useSearchParams } from "react-router-dom";
+import "./MainPage.css";
 
 const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
@@ -13,6 +15,14 @@ const MainPage: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = usePageNumber();
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const closeDetailedCard = () => {
+    setSearchParams(() => {
+      searchParams.delete("details");
+      return searchParams;
+    });
+  };
 
   useEffect(() => {
     const search = async () => {
@@ -32,23 +42,28 @@ const MainPage: FC = () => {
   }, [page, searchPhrase]);
 
   return (
-    <>
-      <SearchSection
-        searchPhrase={searchPhrase}
-        setSearchPhrase={(searchPhrase: string) => {
-          setSearchPhrase(searchPhrase);
-          setPage(1);
-        }}
-      />
-      <CardList persons={persons} isLoading={isLoading} />
-      {!isLoading && persons.length !== 0 && (
-        <Pagination
-          currentPage={page}
-          hasNextPage={hasNextPage}
-          setPage={setPage}
+    <main className="main">
+      <div className="main-panel">
+        <SearchSection
+          searchPhrase={searchPhrase}
+          setSearchPhrase={(searchPhrase: string) => {
+            setSearchPhrase(searchPhrase);
+            setPage(1);
+          }}
+          closeDetailedCard={closeDetailedCard}
         />
-      )}
-    </>
+        <CardList persons={persons} isLoading={isLoading} />
+        {!isLoading && persons.length !== 0 && (
+          <Pagination
+            currentPage={page}
+            hasNextPage={hasNextPage}
+            setPage={setPage}
+            closeDetailedCard={closeDetailedCard}
+          />
+        )}
+      </div>
+      <Outlet />
+    </main>
   );
 };
 

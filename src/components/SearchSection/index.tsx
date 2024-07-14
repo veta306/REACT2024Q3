@@ -4,9 +4,14 @@ import "./SearchSection.css";
 interface Props {
   searchPhrase: string;
   setSearchPhrase: (searchPhrase: string) => void;
+  closeDetailedCard: () => void;
 }
 
-const SearchSection: FC<Props> = ({ searchPhrase, setSearchPhrase }) => {
+const SearchSection: FC<Props> = ({
+  searchPhrase,
+  setSearchPhrase,
+  closeDetailedCard,
+}) => {
   const [searchInput, setSearchInput] = useState(searchPhrase);
   const [errorTriggered, setErrorTriggered] = useState(false);
 
@@ -20,7 +25,11 @@ const SearchSection: FC<Props> = ({ searchPhrase, setSearchPhrase }) => {
   }
 
   return (
-    <form className="search-form" onSubmit={handleSubmit}>
+    <form
+      className="search-form"
+      onSubmit={handleSubmit}
+      onClick={closeDetailedCard}
+    >
       <input
         className="search-input"
         type="text"
