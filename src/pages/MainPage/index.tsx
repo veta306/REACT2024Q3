@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
-import Film from "../../types/Film";
-import fetchFilms from "../../api";
+import { Person } from "../../types/Person";
+import fetchPeople from "../../api";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import Spinner from "../../components/Spinner";
@@ -10,7 +10,7 @@ import Pagination from "../../components/Pagination";
 
 const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
-  const [films, setFilms] = useState<Film[]>([]);
+  const [persons, setPersons] = useState<Person[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = usePageNumber();
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -18,10 +18,10 @@ const MainPage: FC = () => {
   useEffect(() => {
     const search = async () => {
       setIsLoading(true);
-      const response = await fetchFilms(page, searchPhrase);
+      const response = await fetchPeople(page, searchPhrase);
       setIsLoading(false);
       if (!ignore) {
-        setFilms(response.results);
+        setPersons(response.results);
         setHasNextPage(Boolean(response.next));
       }
     };
@@ -36,9 +36,12 @@ const MainPage: FC = () => {
     <>
       <SearchSection
         searchPhrase={searchPhrase}
-        setSearchPhrase={setSearchPhrase}
+        setSearchPhrase={(searchPhrase: string) => {
+          setSearchPhrase(searchPhrase);
+          setPage(1);
+        }}
       />
-      <CardList films={films} />
+      <CardList persons={persons} />
       <Pagination
         currentPage={page}
         hasNextPage={hasNextPage}

@@ -1,14 +1,15 @@
-import Film from "../types/Film";
-const URL = "https://swapi.dev/api/films/";
+import { Person } from "../types/Person";
+
+const URL = "https://swapi.dev/api/people/";
 
 interface ApiResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Film[];
+  results: Person[];
 }
 
-export default async function fetchFilms(page: number, searchPhrase: string) {
+export default async function fetchPeople(page: number, searchPhrase: string) {
   const url =
     URL + `?page=${page}` + (searchPhrase ? `&search=${searchPhrase}` : "");
   const result = await fetch(url);
