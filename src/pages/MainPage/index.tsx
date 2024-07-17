@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
-import { Person } from "../../types/Person";
-import { fetchPeople } from "../../api";
+import usePageNumber from "../../hooks/usePageNumber";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
-import usePageNumber from "../../hooks/usePageNumber";
 import Pagination from "../../components/Pagination";
-import { Outlet, useSearchParams } from "react-router-dom";
-import "./MainPage.css";
+import { Person } from "../../types/Person";
+import { fetchPeople } from "../../api";
+import styles from "./MainPage.module.scss";
 
 const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
@@ -44,8 +44,8 @@ const MainPage: FC = () => {
   }, [page, searchPhrase]);
 
   return (
-    <main className="main">
-      <div className="main-panel">
+    <main className={styles.main}>
+      <div className={styles.mainPanel}>
         <SearchSection
           searchPhrase={searchPhrase}
           setSearchPhrase={(searchPhrase: string) => {

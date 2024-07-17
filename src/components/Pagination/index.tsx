@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./Pagination.css";
+import styles from "./Pagination.module.scss";
 
 interface Props {
   currentPage: number;
@@ -23,7 +23,7 @@ const Pagination: FC<Props> = ({
   };
 
   return (
-    <div className="pagination" onClick={closeDetailedCard}>
+    <div className={styles.pagination} onClick={closeDetailedCard}>
       <button onClick={handlePrev} disabled={currentPage <= 1}>
         Previous
       </button>

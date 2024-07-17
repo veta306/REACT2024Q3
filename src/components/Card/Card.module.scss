@@ -8,15 +8,15 @@
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-}
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 
-.name {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
+  .name {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
 }

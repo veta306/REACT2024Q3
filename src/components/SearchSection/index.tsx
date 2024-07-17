@@ -1,5 +1,5 @@
 import { FormEvent, useState, FC } from "react";
-import "./SearchSection.css";
+import styles from "./SearchSection.module.scss";
 
 interface Props {
   searchPhrase: string;
@@ -26,21 +26,24 @@ const SearchSection: FC<Props> = ({
 
   return (
     <form
-      className="search-form"
+      className={styles.searchForm}
       onSubmit={handleSubmit}
       onClick={closeDetailedCard}
     >
       <input
-        className="search-input"
+        className={styles.searchInput}
         type="text"
         onChange={(e) => setSearchInput(e.target.value)}
         value={searchInput}
       />
-      <button className="search-button" type="submit">
+      <button
+        className={`${styles.button} ${styles.searchButton}`}
+        type="submit"
+      >
         Search
       </button>
       <button
-        className="error-button"
+        className={`${styles.button} ${styles.errorButton}`}
         type="button"
         onClick={() => {
           setErrorTriggered(true);

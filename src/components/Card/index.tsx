@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Person } from "../../types/Person";
-import "./Card.css";
 import { useSearchParams } from "react-router-dom";
+import styles from "./Card.module.scss";
 
 interface Props {
   person: Person;
@@ -12,7 +12,7 @@ const Card: FC<Props> = ({ person }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   return (
     <div
-      className="card"
+      className={styles.card}
       onClick={() => {
         setSearchParams(() => {
           searchParams.set("details", id);
@@ -24,7 +24,7 @@ const Card: FC<Props> = ({ person }) => {
         src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
         alt="person photo"
       />
-      <div className="name">{person.name}</div>
+      <div className={styles.name}>{person.name}</div>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import ErrorBoundary from "./components/ErrorBoundary";
 import MainPage from "./pages/MainPage";
 import ErrorPage from "./pages/ErrorPage";
-import "./index.css";
+import ErrorBoundary from "./components/ErrorBoundary";
 import DetailedCard from "./components/DetailedCard";
+import "./index.scss";
 
 const router = createBrowserRouter([
   {

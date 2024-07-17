@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import "./DetailedCard.css";
 import { fetchPerson } from "../../api";
 import { Person } from "../../types/Person";
 import Spinner from "../Spinner";
+import styles from "./DetailedCard.module.scss";
 
 const DetailedCard: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,10 +39,10 @@ const DetailedCard: FC = () => {
   return (
     <>
       {id && (
-        <div className="details">
+        <div className={styles.details}>
           {!isLoading && person && (
-            <div className="details-content">
-              <button className="close-button" onClick={handleClose}>
+            <>
+              <button className={styles.closeButton} onClick={handleClose}>
                 ×
               </button>
               <h1>{person.name}</h1>
@@ -57,7 +57,7 @@ const DetailedCard: FC = () => {
               <p>Height: {person.height} cm</p>
               <p>Mass: {person.mass} kg</p>
               <p>Skin Color: {person.skin_color}</p>
-            </div>
+            </>
           )}
           <Spinner isLoading={isLoading} />
         </div>

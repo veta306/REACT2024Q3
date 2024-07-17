@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./Spinner.css";
+import styles from "./Spinner.module.scss";
 
 interface Props {
   isLoading: boolean;
@@ -8,8 +8,8 @@ interface Props {
 const Spinner: FC<Props> = ({ isLoading }) => {
   return (
     isLoading && (
-      <div className="spinner-overlay">
-        <div className="spinner" />
+      <div className={styles.spinnerOverlay}>
+        <div className={styles.spinner} />
       </div>
     )
   );

@@ -2,7 +2,7 @@ import { FC, useRef } from "react";
 import Card from "../Card";
 import { Person } from "../../types/Person";
 import Spinner from "../Spinner";
-import "./CardList.css";
+import styles from "./CardList.module.scss";
 
 interface Props {
   persons: Person[];
@@ -15,7 +15,7 @@ const CardList: FC<Props> = ({ persons, isLoading, closeDetailedCard }) => {
     <>
       {!isLoading && (
         <div
-          className="cards"
+          className={styles.cards}
           ref={cards}
           onClick={(e) => {
             if (e.target === cards.current) closeDetailedCard();
