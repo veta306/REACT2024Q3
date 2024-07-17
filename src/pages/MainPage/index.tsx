@@ -18,10 +18,12 @@ const MainPage: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const closeDetailedCard = () => {
-    setSearchParams(() => {
-      searchParams.delete("details");
-      return searchParams;
-    });
+    if (searchParams.has("details")) {
+      setSearchParams(() => {
+        searchParams.delete("details");
+        return searchParams;
+      });
+    }
   };
 
   useEffect(() => {
@@ -52,7 +54,11 @@ const MainPage: FC = () => {
           }}
           closeDetailedCard={closeDetailedCard}
         />
-        <CardList persons={persons} isLoading={isLoading} />
+        <CardList
+          persons={persons}
+          isLoading={isLoading}
+          closeDetailedCard={closeDetailedCard}
+        />
         {!isLoading && persons.length !== 0 && (
           <Pagination
             currentPage={page}
