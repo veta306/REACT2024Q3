@@ -11,7 +11,7 @@ const Card: FC<Props> = ({ person }) => {
   const id = person.url.match(/\/(\d+)\/$/)![1];
   const [searchParams, setSearchParams] = useSearchParams();
   return (
-    <div
+    <article
       className={styles.card}
       onClick={() => {
         setSearchParams(() => {
@@ -25,7 +25,7 @@ const Card: FC<Props> = ({ person }) => {
         alt="person photo"
       />
       <div className={styles.name}>{person.name}</div>
-    </div>
+    </article>
   );
 };
 

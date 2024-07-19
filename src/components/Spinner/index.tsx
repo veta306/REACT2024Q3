@@ -9,7 +9,7 @@ const Spinner: FC<Props> = ({ isLoading }) => {
   return (
     isLoading && (
       <div className={styles.spinnerOverlay}>
-        <div className={styles.spinner} />
+        <div className={styles.spinner} role="status" />
       </div>
     )
   );
