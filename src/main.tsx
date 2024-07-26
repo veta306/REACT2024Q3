@@ -6,6 +6,7 @@ import ErrorPage from "./pages/ErrorPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import DetailedCard from "./components/DetailedCard";
 import "./index.scss";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +19,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <RouterProvider router={router} />
-    </ErrorBoundary>
+    <ThemeProvider>
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    </ThemeProvider>
   </React.StrictMode>,
 );

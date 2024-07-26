@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination";
 import { Person } from "../../types/Person";
 import { fetchPeople } from "../../api";
 import styles from "./MainPage.module.scss";
+import { useTheme } from "../../hooks/useTheme";
 
 const MainPage: FC = () => {
   const [searchPhrase, setSearchPhrase] = useSearchPhrase();
@@ -16,6 +17,8 @@ const MainPage: FC = () => {
   const [page, setPage] = usePageNumber();
   const [hasNextPage, setHasNextPage] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { theme, toggleTheme } = useTheme();
 
   const closeDetailedCard = () => {
     if (searchParams.has("details")) {
@@ -69,6 +72,18 @@ const MainPage: FC = () => {
         )}
       </div>
       <Outlet />
+      <p className={styles.toggleTheme}>
+        Switch to {theme === "light" ? "Dark" : "Light"} Theme
+      </p>
+      <input
+        className={styles.toggleInput}
+        type="checkbox"
+        id="switch"
+        onClick={toggleTheme}
+      />
+      <label className={styles.toggleLabel} htmlFor="switch">
+        Toggle
+      </label>
     </main>
   );
 };
