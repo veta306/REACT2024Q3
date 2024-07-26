@@ -2,6 +2,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, useSearchParams } from "react-router-dom";
 import { Person } from "../../types/Person";
 import Card from ".";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import selectedItemsReducer from "../../features/selectedItems/selectedItemsSlice";
 
 const mockSetSearchParams = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -24,12 +27,20 @@ const mockPerson: Person = {
   url: "https://swapi.dev/api/people/1/",
 };
 
+const store = configureStore({
+  reducer: {
+    selectedItems: selectedItemsReducer,
+  },
+});
+
 describe("Card component", () => {
   it("renders the relevant card data", () => {
     render(
-      <MemoryRouter>
-        <Card person={mockPerson} />
-      </MemoryRouter>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <Card person={mockPerson} />
+        </MemoryRouter>
+      </Provider>,
     );
 
     const nameElement = screen.getByText(mockPerson.name);
@@ -46,9 +57,11 @@ describe("Card component", () => {
   it("opens a detailed card component on click", () => {
     const [searchParams, setSearchParams] = useSearchParams();
     render(
-      <MemoryRouter>
-        <Card person={mockPerson} />
-      </MemoryRouter>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <Card person={mockPerson} />
+        </MemoryRouter>
+      </Provider>,
     );
 
     const cardElement = screen.getByRole("article");

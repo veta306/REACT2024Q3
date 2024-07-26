@@ -5,7 +5,7 @@ import usePageNumber from "../../hooks/usePageNumber";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import Pagination from "../../components/Pagination";
-import { useFetchPeopleQuery } from "../../api";
+import { useFetchPeopleQuery } from "../../features/api/apiSlice";
 import styles from "./MainPage.module.scss";
 import { useTheme } from "../../hooks/useTheme";
 

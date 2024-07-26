@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Person } from "../types/Person";
+import { Person } from "../../types/Person";
 
 export interface ApiResponse {
   count: number;
@@ -8,7 +8,7 @@ export interface ApiResponse {
   results: Person[];
 }
 
-const api = createApi({
+const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "https://swapi.dev/api/people/" }),
   endpoints: (builder) => ({
@@ -25,6 +25,6 @@ const api = createApi({
   }),
 });
 
-export const { useFetchPeopleQuery, useFetchPersonQuery } = api;
+export const { useFetchPeopleQuery, useFetchPersonQuery } = apiSlice;
 
-export default api;
+export default apiSlice;

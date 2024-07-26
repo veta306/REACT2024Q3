@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useFetchPersonQuery } from "../../api";
+import { useFetchPersonQuery } from "../../features/api/apiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import Spinner from "../Spinner";
 import styles from "./DetailedCard.module.scss";

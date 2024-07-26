@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import CardList from ".";
 import { Person } from "../../types/Person";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import selectedItemsReducer from "../../features/selectedItems/selectedItemsSlice";
 
 const mockPersons: Person[] = [
   {
@@ -28,18 +31,26 @@ const mockPersons: Person[] = [
   },
 ];
 
+const store = configureStore({
+  reducer: {
+    selectedItems: selectedItemsReducer,
+  },
+});
+
 const mockCloseDetailedCard = vi.fn();
 
 describe("CardList component", () => {
   it("renders the specified number of cards", () => {
     render(
-      <MemoryRouter>
-        <CardList
-          persons={mockPersons}
-          isLoading={false}
-          closeDetailedCard={mockCloseDetailedCard}
-        />
-      </MemoryRouter>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <CardList
+            persons={mockPersons}
+            isLoading={false}
+            closeDetailedCard={mockCloseDetailedCard}
+          />
+        </MemoryRouter>
+      </Provider>,
     );
 
     const cards = screen.getAllByRole("article");

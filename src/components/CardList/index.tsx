@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC } from "react";
 import Card from "../Card";
 import { Person } from "../../types/Person";
 import Spinner from "../Spinner";
@@ -10,17 +10,10 @@ interface Props {
   closeDetailedCard: () => void;
 }
 const CardList: FC<Props> = ({ persons, isLoading, closeDetailedCard }) => {
-  const cards = useRef<HTMLDivElement>(null);
   return (
     <>
       {!isLoading && (
-        <div
-          className={styles.cards}
-          ref={cards}
-          onClick={(e) => {
-            if (e.target === cards.current) closeDetailedCard();
-          }}
-        >
+        <div className={styles.cards} onClick={() => closeDetailedCard()}>
           {persons.map((person) => (
             <Card key={person.name} person={person} />
           ))}
