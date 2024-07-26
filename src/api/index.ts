@@ -1,25 +1,30 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Person } from "../types/Person";
 
-const URL = "https://swapi.dev/api/people/";
-
-interface ApiResponse {
+export interface ApiResponse {
   count: number;
   next: string | null;
   previous: string | null;
   results: Person[];
 }
 
-export async function fetchPeople(page: number, searchPhrase: string) {
-  const url =
-    URL + `?page=${page}` + (searchPhrase ? `&search=${searchPhrase}` : "");
-  const result = await fetch(url);
-  const response: ApiResponse = await result.json();
-  return response;
-}
+const api = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({ baseUrl: "https://swapi.dev/api/people/" }),
+  endpoints: (builder) => ({
+    fetchPeople: builder.query<
+      ApiResponse,
+      { page: number; searchPhrase: string }
+    >({
+      query: ({ page, searchPhrase }) =>
+        `?page=${page}${searchPhrase ? `&search=${searchPhrase}` : ""}`,
+    }),
+    fetchPerson: builder.query<Person, string>({
+      query: (id) => `${id}`,
+    }),
+  }),
+});
 
-export async function fetchPerson(id: string) {
-  const url = URL + id;
-  const result = await fetch(url);
-  const response: Person = await result.json();
-  return response;
-}
+export const { useFetchPeopleQuery, useFetchPersonQuery } = api;
+
+export default api;

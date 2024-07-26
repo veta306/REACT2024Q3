@@ -5,8 +5,10 @@ import MainPage from "./pages/MainPage";
 import ErrorPage from "./pages/ErrorPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import DetailedCard from "./components/DetailedCard";
-import "./index.scss";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { Provider } from "react-redux";
+import { store } from "./stores/ReduxStore";
+import "./index.scss";
 
 const router = createBrowserRouter([
   {
@@ -19,10 +21,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <ErrorBoundary>
-        <RouterProvider router={router} />
-      </ErrorBoundary>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <ErrorBoundary>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
 );

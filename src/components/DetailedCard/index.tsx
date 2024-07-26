@@ -1,33 +1,15 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchPerson } from "../../api";
-import { Person } from "../../types/Person";
+import { useFetchPersonQuery } from "../../api";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import Spinner from "../Spinner";
 import styles from "./DetailedCard.module.scss";
 
 const DetailedCard: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [person, setPerson] = useState<Person>();
-  const [isLoading, setIsLoading] = useState(false);
   const id = searchParams.get("details");
 
-  useEffect(() => {
-    if (id) {
-      const getDetails = async () => {
-        setIsLoading(true);
-        const response = await fetchPerson(id);
-        if (!ignore) {
-          setIsLoading(false);
-          setPerson(response);
-        }
-      };
-      let ignore = false;
-      getDetails();
-      return () => {
-        ignore = true;
-      };
-    }
-  }, [id]);
+  const { data: person, isFetching } = useFetchPersonQuery(id || skipToken);
 
   const handleClose = () => {
     setSearchParams((prev) => {
@@ -40,7 +22,7 @@ const DetailedCard: FC = () => {
     <>
       {id && (
         <div className={styles.details}>
-          {!isLoading && person && (
+          {!isFetching && person && (
             <>
               <button className={styles.closeButton} onClick={handleClose}>
                 ×
@@ -59,7 +41,7 @@ const DetailedCard: FC = () => {
               <p>Skin Color: {person.skin_color}</p>
             </>
           )}
-          <Spinner isLoading={isLoading} />
+          <Spinner isLoading={isFetching} />
         </div>
       )}
     </>

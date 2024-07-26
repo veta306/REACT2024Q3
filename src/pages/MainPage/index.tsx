@@ -1,21 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Outlet, useSearchParams } from "react-router-dom";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
 import usePageNumber from "../../hooks/usePageNumber";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
 import Pagination from "../../components/Pagination";
-import { Person } from "../../types/Person";
-import { fetchPeople } from "../../api";
+import { useFetchPeopleQuery } from "../../api";
 import styles from "./MainPage.module.scss";
 import { useTheme } from "../../hooks/useTheme";
 
 const MainPage: FC = () => {
-  const [searchPhrase, setSearchPhrase] = useSearchPhrase();
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = usePageNumber();
-  const [hasNextPage, setHasNextPage] = useState(false);
+  const [searchPhrase, setSearchPhrase] = useSearchPhrase();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { theme, toggleTheme } = useTheme();
@@ -29,23 +25,10 @@ const MainPage: FC = () => {
     }
   };
 
-  useEffect(() => {
-    const search = async () => {
-      setIsLoading(true);
-      const response = await fetchPeople(page, searchPhrase);
-      if (!ignore) {
-        setIsLoading(false);
-        setPersons(response.results);
-        setHasNextPage(Boolean(response.next));
-      }
-    };
-    let ignore = false;
-    search();
-    return () => {
-      ignore = true;
-    };
-  }, [page, searchPhrase]);
-
+  const { data, isFetching } = useFetchPeopleQuery({
+    page,
+    searchPhrase,
+  });
   return (
     <main className={styles.main}>
       <div className={styles.mainPanel}>
@@ -58,14 +41,14 @@ const MainPage: FC = () => {
           closeDetailedCard={closeDetailedCard}
         />
         <CardList
-          persons={persons}
-          isLoading={isLoading}
+          persons={data?.results || []}
+          isLoading={isFetching}
           closeDetailedCard={closeDetailedCard}
         />
-        {!isLoading && persons.length !== 0 && (
+        {!isFetching && data?.results.length !== 0 && (
           <Pagination
             currentPage={page}
-            hasNextPage={hasNextPage}
+            hasNextPage={Boolean(data?.next)}
             setPage={setPage}
             closeDetailedCard={closeDetailedCard}
           />
