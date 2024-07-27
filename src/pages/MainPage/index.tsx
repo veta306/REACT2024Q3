@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination";
 import { useFetchPeopleQuery } from "../../features/api/apiSlice";
 import styles from "./MainPage.module.scss";
 import { useTheme } from "../../hooks/useTheme";
+import Flyout from "../../components/Flyout";
 
 const MainPage: FC = () => {
   const [page, setPage] = usePageNumber();
@@ -55,6 +56,7 @@ const MainPage: FC = () => {
         )}
       </div>
       <Outlet />
+      <Flyout />
       <p className={styles.toggleTheme}>
         Switch to {theme === "light" ? "Dark" : "Light"} Theme
       </p>

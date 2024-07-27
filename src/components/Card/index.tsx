@@ -16,7 +16,7 @@ const Card: FC<Props> = ({ person }) => {
 
   const dispatch = useDispatch();
   const isSelected = Boolean(
-    useSelector((state: RootState) => state.selectedItems.items[id]),
+    useSelector((state: RootState) => state.selectedItems.ids.includes(id)),
   );
 
   return (

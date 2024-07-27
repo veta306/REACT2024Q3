@@ -3,4 +3,30 @@
   justify-content: center;
   gap: 20px;
   padding: 20px;
+
+  span {
+    margin: 0 10px;
+    font-size: 20px;
+  }
+}
+
+.change-button {
+  width: 92px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
 }
