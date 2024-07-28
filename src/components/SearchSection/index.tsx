@@ -1,19 +1,16 @@
 import { FormEvent, useState, FC } from "react";
 import styles from "./SearchSection.module.scss";
+import useCloseDetailedCard from "../../hooks/useCloseDetailedCard";
 
 interface Props {
   searchPhrase: string;
   setSearchPhrase: (searchPhrase: string) => void;
-  closeDetailedCard: () => void;
 }
 
-const SearchSection: FC<Props> = ({
-  searchPhrase,
-  setSearchPhrase,
-  closeDetailedCard,
-}) => {
+const SearchSection: FC<Props> = ({ searchPhrase, setSearchPhrase }) => {
   const [searchInput, setSearchInput] = useState(searchPhrase);
   const [errorTriggered, setErrorTriggered] = useState(false);
+  const closeDetailedCard = useCloseDetailedCard();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

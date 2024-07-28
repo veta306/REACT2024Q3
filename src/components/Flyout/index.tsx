@@ -1,14 +1,17 @@
 import { FC, useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { unselectAllItems } from "../../features/selectedItems/selectedItemsSlice";
+import { unselectAllItems } from "../../features/items/itemsSlice";
 import styles from "./Flyout.module.scss";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Flyout: FC = () => {
   const dispatch = useDispatch();
   const [url, setUrl] = useState<string>("");
-  const { ids, items } = useSelector((state: RootState) => state.selectedItems);
+  const selectedItems = useSelector(
+    (state: RootState) => state.items.selectedItems,
+  );
+  const count = Object.entries(selectedItems).length;
   const theme = useContext(ThemeContext);
 
   const generateCsvContent = () => {
@@ -23,9 +26,7 @@ const Flyout: FC = () => {
       "Skin Color",
       "URL",
     ];
-
-    const csvRows = ids.map((id) => {
-      const item = items[id];
+    const csvRows = Object.values(selectedItems).map((item) => {
       return [
         item.name,
         item.birth_year,
@@ -48,14 +49,14 @@ const Flyout: FC = () => {
   };
 
   return (
-    ids.length > 0 && (
+    count > 0 && (
       <div
         className={styles.flyout}
         style={{ backgroundColor: theme?.theme === "dark" ? "black" : "white" }}
       >
         <p
           className={styles.selectedCount}
-        >{`${ids.length} item(s) are selected`}</p>
+        >{`${count} item(s) are selected`}</p>
         <button
           className={styles.unselectButton}
           onClick={() => dispatch(unselectAllItems())}
@@ -65,7 +66,7 @@ const Flyout: FC = () => {
         <a
           href={url}
           onClick={generateCsvContent}
-          download={`${ids.length}_persons.csv`}
+          download={`${count}_persons.csv`}
           className={styles.downloadButton}
         >
           Download

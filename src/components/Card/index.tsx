@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { Person } from "../../types/Person";
 import { useSearchParams } from "react-router-dom";
-import styles from "./Card.module.scss";
 import { useDispatch, useSelector } from "react-redux";
+import { Person } from "../../types/Person";
 import { RootState } from "../../app/store";
-import { toggleSelectedItem } from "../../features/selectedItems/selectedItemsSlice";
+import { toggleSelectedItem } from "../../features/items/itemsSlice";
+import styles from "./Card.module.scss";
 
 interface Props {
   person: Person;
@@ -16,7 +16,7 @@ const Card: FC<Props> = ({ person }) => {
 
   const dispatch = useDispatch();
   const isSelected = Boolean(
-    useSelector((state: RootState) => state.selectedItems.ids.includes(id)),
+    useSelector((state: RootState) => state.items.selectedItems[id]),
   );
 
   return (

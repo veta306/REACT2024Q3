@@ -1,19 +1,15 @@
 import { FC } from "react";
 import styles from "./Pagination.module.scss";
+import useCloseDetailedCard from "../../hooks/useCloseDetailedCard";
 
 interface Props {
   currentPage: number;
   hasNextPage: boolean;
   setPage: (page: number) => void;
-  closeDetailedCard: () => void;
 }
 
-const Pagination: FC<Props> = ({
-  currentPage,
-  hasNextPage,
-  setPage,
-  closeDetailedCard,
-}) => {
+const Pagination: FC<Props> = ({ currentPage, hasNextPage, setPage }) => {
+  const closeDetailedCard = useCloseDetailedCard();
   const handlePrev = () => {
     if (currentPage > 1) setPage(currentPage - 1);
   };

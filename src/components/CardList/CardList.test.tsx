@@ -4,7 +4,7 @@ import { Person } from "../../types/Person";
 import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import selectedItemsReducer from "../../features/selectedItems/selectedItemsSlice";
+import selectedItemsReducer from "../../features/items/itemsSlice";
 
 const mockPersons: Person[] = [
   {

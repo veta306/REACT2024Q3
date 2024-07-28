@@ -1,15 +1,17 @@
 import { FC } from "react";
 import Card from "../Card";
-import { Person } from "../../types/Person";
 import Spinner from "../Spinner";
 import styles from "./CardList.module.scss";
+import useCloseDetailedCard from "../../hooks/useCloseDetailedCard";
+import { Person } from "../../types/Person";
 
 interface Props {
   persons: Person[];
   isLoading: boolean;
-  closeDetailedCard: () => void;
 }
-const CardList: FC<Props> = ({ persons, isLoading, closeDetailedCard }) => {
+const CardList: FC<Props> = ({ persons, isLoading }) => {
+  const closeDetailedCard = useCloseDetailedCard();
+
   return (
     <>
       {!isLoading && (
