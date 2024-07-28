@@ -4,7 +4,12 @@ import { Person } from "../../types/Person";
 import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import selectedItemsReducer from "../../features/items/itemsSlice";
+import itemsReducer from "../../features/items/itemsSlice";
+
+vi.mock("../../hooks/useCloseDetailedCard", () => ({
+  __esModule: true,
+  default: vi.fn(),
+}));
 
 const mockPersons: Person[] = [
   {
@@ -33,22 +38,16 @@ const mockPersons: Person[] = [
 
 const store = configureStore({
   reducer: {
-    selectedItems: selectedItemsReducer,
+    items: itemsReducer,
   },
 });
-
-const mockCloseDetailedCard = vi.fn();
 
 describe("CardList component", () => {
   it("renders the specified number of cards", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <CardList
-            persons={mockPersons}
-            isLoading={false}
-            closeDetailedCard={mockCloseDetailedCard}
-          />
+          <CardList persons={mockPersons} isLoading={false} />
         </MemoryRouter>
       </Provider>,
     );
@@ -58,26 +57,14 @@ describe("CardList component", () => {
   });
 
   it("displays the appropriate message if no cards are present", () => {
-    render(
-      <CardList
-        persons={[]}
-        isLoading={false}
-        closeDetailedCard={mockCloseDetailedCard}
-      />,
-    );
+    render(<CardList persons={[]} isLoading={false} />);
 
     const message = screen.getByText(/no search results/i);
     expect(message).toBeInTheDocument();
   });
 
   it("renders the spinner when loading", () => {
-    render(
-      <CardList
-        persons={[]}
-        isLoading={true}
-        closeDetailedCard={mockCloseDetailedCard}
-      />,
-    );
+    render(<CardList persons={[]} isLoading={true} />);
 
     const spinner = screen.getByRole("status");
     expect(spinner).toBeInTheDocument();

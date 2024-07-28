@@ -4,7 +4,7 @@ import { Person } from "../../types/Person";
 import Card from ".";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import selectedItemsReducer from "../../features/items/itemsSlice";
+import itemsReducer from "../../features/items/itemsSlice";
 
 const mockSetSearchParams = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -29,7 +29,7 @@ const mockPerson: Person = {
 
 const store = configureStore({
   reducer: {
-    selectedItems: selectedItemsReducer,
+    items: itemsReducer,
   },
 });
 

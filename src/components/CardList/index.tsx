@@ -14,15 +14,16 @@ const CardList: FC<Props> = ({ persons, isLoading }) => {
 
   return (
     <>
-      {!isLoading && (
+      {!isLoading ? (
         <div className={styles.cards} onClick={() => closeDetailedCard()}>
           {persons.map((person) => (
             <Card key={person.name} person={person} />
           ))}
           {persons.length === 0 && <h1>No search results</h1>}
         </div>
+      ) : (
+        <Spinner />
       )}
-      <Spinner isLoading={isLoading} />
     </>
   );
 };

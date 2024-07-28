@@ -41,7 +41,7 @@ const DetailedCard: FC = () => {
               <p>Skin Color: {person.skin_color}</p>
             </>
           )}
-          <Spinner isLoading={isFetching} />
+          {isFetching && <Spinner />}
         </div>
       )}
     </>
