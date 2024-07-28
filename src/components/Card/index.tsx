@@ -1,7 +1,10 @@
 import { FC } from "react";
-import { Person } from "../../types/Person";
-import "./Card.css";
 import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Person } from "../../types/Person";
+import { RootState } from "../../app/store";
+import { toggleSelectedItem } from "../../features/items/itemsSlice";
+import styles from "./Card.module.scss";
 
 interface Props {
   person: Person;
@@ -10,10 +13,17 @@ interface Props {
 const Card: FC<Props> = ({ person }) => {
   const id = person.url.match(/\/(\d+)\/$/)![1];
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const dispatch = useDispatch();
+  const isSelected = Boolean(
+    useSelector((state: RootState) => state.items.selectedItems[id]),
+  );
+
   return (
-    <div
-      className="card"
-      onClick={() => {
+    <article
+      className={styles.card}
+      onClick={(e) => {
+        e.stopPropagation();
         setSearchParams(() => {
           searchParams.set("details", id);
           return searchParams;
@@ -24,8 +34,15 @@ const Card: FC<Props> = ({ person }) => {
         src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
         alt="person photo"
       />
-      <div className="name">{person.name}</div>
-    </div>
+      <div className={styles.name}>{person.name}</div>
+      <input
+        className={styles.checkbox}
+        type="checkbox"
+        checked={isSelected}
+        onClick={(e) => e.stopPropagation()}
+        onChange={() => dispatch(toggleSelectedItem({ id, item: person }))}
+      />
+    </article>
   );
 };
 

@@ -1,68 +1,55 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
+import { Outlet } from "react-router-dom";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
-import { Person } from "../../types/Person";
-import { fetchPeople } from "../../api";
+import usePageNumber from "../../hooks/usePageNumber";
 import SearchSection from "../../components/SearchSection";
 import CardList from "../../components/CardList";
-import usePageNumber from "../../hooks/usePageNumber";
 import Pagination from "../../components/Pagination";
-import { Outlet, useSearchParams } from "react-router-dom";
-import "./MainPage.css";
+import { useFetchPeopleQuery } from "../../features/api/apiSlice";
+import { useTheme } from "../../hooks/useTheme";
+import Flyout from "../../components/Flyout";
+import styles from "./MainPage.module.scss";
 
 const MainPage: FC = () => {
-  const [searchPhrase, setSearchPhrase] = useSearchPhrase();
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = usePageNumber();
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const closeDetailedCard = () => {
-    setSearchParams(() => {
-      searchParams.delete("details");
-      return searchParams;
-    });
-  };
-
-  useEffect(() => {
-    const search = async () => {
-      setIsLoading(true);
-      const response = await fetchPeople(page, searchPhrase);
-      if (!ignore) {
-        setIsLoading(false);
-        setPersons(response.results);
-        setHasNextPage(Boolean(response.next));
-      }
-    };
-    let ignore = false;
-    search();
-    return () => {
-      ignore = true;
-    };
-  }, [page, searchPhrase]);
+  const [searchPhrase, setSearchPhrase] = useSearchPhrase();
+  const { theme, toggleTheme } = useTheme();
+  const { data, isFetching } = useFetchPeopleQuery({
+    page,
+    searchPhrase,
+  });
 
   return (
-    <main className="main">
-      <div className="main-panel">
+    <main className={styles.main}>
+      <div className={styles.mainPanel}>
         <SearchSection
           searchPhrase={searchPhrase}
           setSearchPhrase={(searchPhrase: string) => {
             setSearchPhrase(searchPhrase);
             setPage(1);
           }}
-          closeDetailedCard={closeDetailedCard}
         />
-        <CardList persons={persons} isLoading={isLoading} />
-        {!isLoading && persons.length !== 0 && (
+        <CardList persons={data?.results || []} isLoading={isFetching} />
+        {!isFetching && data?.results.length !== 0 && (
           <Pagination
             currentPage={page}
-            hasNextPage={hasNextPage}
+            hasNextPage={Boolean(data?.next)}
             setPage={setPage}
-            closeDetailedCard={closeDetailedCard}
           />
         )}
       </div>
       <Outlet />
+      <Flyout />
+      <p className={styles.toggleTheme}>
+        Switch to {theme === "light" ? "Dark" : "Light"} Theme
+      </p>
+      <input
+        className={styles.toggleInput}
+        type="checkbox"
+        id="switch"
+        onClick={toggleTheme}
+      />
+      <label className={styles.toggleLabel} htmlFor="switch" />
     </main>
   );
 };

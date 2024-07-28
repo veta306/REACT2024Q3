@@ -7,16 +7,16 @@
   border-radius: 8px;
   padding: 20px;
   margin-top: 80px;
-}
 
-.details h1 {
-  font-size: 2em;
-  margin: 0 0 10px;
-}
+  h1 {
+    font-size: 2em;
+    margin: 0 0 10px;
+  }
 
-.details p {
-  font-size: 1.2em;
-  margin: 5px 0;
+  p {
+    font-size: 1.2em;
+    margin: 5px 0;
+  }
 }
 
 .close-button {
@@ -30,8 +30,8 @@
   font-size: 4em;
   line-height: 0.5em;
   cursor: pointer;
-}
 
-.close-button:hover {
-  color: red;
+  &:hover {
+    color: red;
+  }
 }

@@ -1,17 +1,11 @@
 import { FC } from "react";
-import "./Spinner.css";
+import styles from "./Spinner.module.scss";
 
-interface Props {
-  isLoading: boolean;
-}
-
-const Spinner: FC<Props> = ({ isLoading }) => {
+const Spinner: FC = () => {
   return (
-    isLoading && (
-      <div className="spinner-overlay">
-        <div className="spinner" />
-      </div>
-    )
+    <div className={styles.spinnerOverlay}>
+      <div className={styles.spinner} role="status" />
+    </div>
   );
 };
 
