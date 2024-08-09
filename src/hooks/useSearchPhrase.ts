@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const useSearchPhrase = (): [string, Dispatch<SetStateAction<string>>] => {
+  const isClient = typeof window !== "undefined";
+
   const [searchPhrase, setSearchPhrase] = useState(
-    localStorage.getItem("searchPhrase") || "",
+    isClient ? localStorage.getItem("searchPhrase") || "" : "",
   );
 
   useEffect(() => {

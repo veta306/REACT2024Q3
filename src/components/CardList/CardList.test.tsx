@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import CardList from ".";
 import { Person } from "../../types/Person";
-import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import itemsReducer from "../../features/items/itemsSlice";
@@ -9,6 +8,16 @@ import itemsReducer from "../../features/items/itemsSlice";
 vi.mock("../../hooks/useCloseDetailedCard", () => ({
   __esModule: true,
   default: vi.fn(),
+}));
+
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/",
+  useSearchParams: () => mockSearchParams,
 }));
 
 const mockPersons: Person[] = [
@@ -46,9 +55,7 @@ describe("CardList component", () => {
   it("renders the specified number of cards", () => {
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <CardList persons={mockPersons} isLoading={false} />
-        </MemoryRouter>
+        <CardList persons={mockPersons} isLoading={false} />
       </Provider>,
     );
 

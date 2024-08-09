@@ -1,17 +1,31 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import MainPage from ".";
-import { useFetchPeopleQuery } from "../../features/api/apiSlice";
+import MainPage from "../index";
+import {
+  useFetchPersonQuery,
+  useFetchPeopleQuery,
+} from "../../features/api/apiSlice";
 import useSearchPhrase from "../../hooks/useSearchPhrase";
 import usePageNumber from "../../hooks/usePageNumber";
 import { Mock } from "vitest";
 import { ThemeProvider } from "../../contexts/ThemeContext";
 import itemsReducer from "../../features/items/itemsSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import { Person } from "../../types/Person";
+
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/",
+  useSearchParams: () => mockSearchParams,
+}));
 
 vi.mock("../../features/api/apiSlice", () => ({
   useFetchPeopleQuery: vi.fn(),
+  useFetchPersonQuery: vi.fn(),
 }));
 
 vi.mock("../../hooks/useSearchPhrase", () => ({
@@ -29,6 +43,18 @@ const mockStore = configureStore({
     items: itemsReducer,
   },
 });
+
+const mockPerson: Person = {
+  birth_year: "19BBY",
+  eye_color: "blue",
+  gender: "male",
+  hair_color: "blond",
+  height: "172",
+  mass: "77",
+  name: "Luke Skywalker",
+  skin_color: "fair",
+  url: "https://swapi.dev/api/people/1/",
+};
 
 describe("MainPage component", () => {
   beforeEach(() => {
@@ -48,13 +74,16 @@ describe("MainPage component", () => {
       isFetching: true,
     });
 
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
+
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage />
+        </ThemeProvider>
       </Provider>,
     );
 
@@ -68,6 +97,11 @@ describe("MainPage component", () => {
     const mockSetSearchPhrase = vi.fn();
     const mockSetPage = vi.fn();
     const mockFetchPeople = useFetchPeopleQuery as Mock;
+
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
 
     const mockPeopleResponse = {
       results: [
@@ -101,11 +135,9 @@ describe("MainPage component", () => {
 
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage />
+        </ThemeProvider>
       </Provider>,
     );
 
@@ -124,6 +156,11 @@ describe("MainPage component", () => {
     const mockSetSearchPhrase = vi.fn();
     const mockSetPage = vi.fn();
     const mockFetchPeople = useFetchPeopleQuery as Mock;
+
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
 
     const mockPeopleResponse = {
       results: [
@@ -154,11 +191,9 @@ describe("MainPage component", () => {
 
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage />
+        </ThemeProvider>
       </Provider>,
     );
 

@@ -1,14 +1,14 @@
 import { FC } from "react";
-import { Outlet } from "react-router-dom";
-import useSearchPhrase from "../../hooks/useSearchPhrase";
-import usePageNumber from "../../hooks/usePageNumber";
-import SearchSection from "../../components/SearchSection";
-import CardList from "../../components/CardList";
-import Pagination from "../../components/Pagination";
-import { useFetchPeopleQuery } from "../../features/api/apiSlice";
-import { useTheme } from "../../hooks/useTheme";
-import Flyout from "../../components/Flyout";
-import styles from "./MainPage.module.scss";
+import useSearchPhrase from "../hooks/useSearchPhrase";
+import usePageNumber from "../hooks/usePageNumber";
+import SearchSection from "../components/SearchSection";
+import CardList from "../components/CardList";
+import Pagination from "../components/Pagination";
+import { useFetchPeopleQuery } from "../features/api/apiSlice";
+import { useTheme } from "../hooks/useTheme";
+import Flyout from "../components/Flyout";
+import styles from "../styles/MainPage.module.scss";
+import DetailedCard from "../components/DetailedCard";
 
 const MainPage: FC = () => {
   const [page, setPage] = usePageNumber();
@@ -38,7 +38,7 @@ const MainPage: FC = () => {
           />
         )}
       </div>
-      <Outlet />
+      <DetailedCard />
       <Flyout />
       <p className={styles.toggleTheme}>
         Switch to {theme === "light" ? "Dark" : "Light"} Theme

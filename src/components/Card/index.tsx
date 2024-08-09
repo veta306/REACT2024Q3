@@ -1,10 +1,11 @@
 import { FC } from "react";
-import { useSearchParams } from "react-router-dom";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { Person } from "../../types/Person";
-import { RootState } from "../../app/store";
+import { RootState } from "../../store/store";
 import { toggleSelectedItem } from "../../features/items/itemsSlice";
 import styles from "./Card.module.scss";
+import Image from "next/image";
 
 interface Props {
   person: Person;
@@ -12,7 +13,9 @@ interface Props {
 
 const Card: FC<Props> = ({ person }) => {
   const id = person.url.match(/\/(\d+)\/$/)![1];
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const dispatch = useDispatch();
   const isSelected = Boolean(
@@ -24,15 +27,16 @@ const Card: FC<Props> = ({ person }) => {
       className={styles.card}
       onClick={(e) => {
         e.stopPropagation();
-        setSearchParams(() => {
-          searchParams.set("details", id);
-          return searchParams;
-        });
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("details", id);
+        router.push(pathname + "?" + params);
       }}
     >
-      <img
+      <Image
         src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
         alt="person photo"
+        width={400}
+        height={550}
       />
       <div className={styles.name}>{person.name}</div>
       <input

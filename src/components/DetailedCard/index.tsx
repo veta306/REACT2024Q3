@@ -1,22 +1,18 @@
 import { FC } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "next/navigation";
 import { useFetchPersonQuery } from "../../features/api/apiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import Spinner from "../Spinner";
 import styles from "./DetailedCard.module.scss";
+import useCloseDetailedCard from "../../hooks/useCloseDetailedCard";
+import Image from "next/image";
 
 const DetailedCard: FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const id = searchParams.get("details");
+  const handleClose = useCloseDetailedCard();
 
   const { data: person, isFetching } = useFetchPersonQuery(id || skipToken);
-
-  const handleClose = () => {
-    setSearchParams((prev) => {
-      prev.delete("details");
-      return prev;
-    });
-  };
 
   return (
     <>
@@ -28,9 +24,11 @@ const DetailedCard: FC = () => {
                 ×
               </button>
               <h1>{person.name}</h1>
-              <img
+              <Image
                 src={`https://vieraboschkova.github.io/swapi-gallery/static/assets/img/people/${id}.jpg`}
                 alt="person photo"
+                width={400}
+                height={550}
               />
               <p>Birth Year: {person.birth_year}</p>
               <p>Eye Color: {person.eye_color}</p>

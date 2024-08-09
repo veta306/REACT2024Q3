@@ -1,5 +1,4 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import DetailedCard from ".";
 import { Person } from "../../types/Person";
 import { useFetchPersonQuery } from "../../features/api/apiSlice";
@@ -9,17 +8,15 @@ vi.mock("../../features/api/apiSlice", () => ({
   useFetchPersonQuery: vi.fn(),
 }));
 
-const mockSetSearchParams = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useSearchParams: vi.fn(() => [
-      new URLSearchParams({ details: "1" }),
-      mockSetSearchParams,
-    ]),
-  };
-});
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams("?details=1");
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/?details=1",
+  useSearchParams: () => mockSearchParams,
+}));
 
 const mockPerson: Person = {
   birth_year: "19BBY",
@@ -40,11 +37,7 @@ describe("DetailedCard component", () => {
       isFetching: false,
     });
 
-    render(
-      <MemoryRouter>
-        <DetailedCard />
-      </MemoryRouter>,
-    );
+    render(<DetailedCard />);
     await waitFor(() => {
       expect(screen.getByText(mockPerson.name)).toBeInTheDocument();
       expect(
@@ -77,11 +70,7 @@ describe("DetailedCard component", () => {
       isFetching: false,
     });
 
-    render(
-      <MemoryRouter>
-        <DetailedCard />
-      </MemoryRouter>,
-    );
+    render(<DetailedCard />);
 
     await waitFor(() => {
       expect(screen.getByText(mockPerson.name)).toBeInTheDocument();
@@ -90,8 +79,13 @@ describe("DetailedCard component", () => {
     const closeButton = screen.getByText("×");
     fireEvent.click(closeButton);
 
-    expect(mockSetSearchParams).toHaveBeenCalledWith(expect.any(Function));
-    mockSetSearchParams.mock.calls[0][0](new URLSearchParams());
-    expect(new URLSearchParams().toString()).not.toContain("details=1");
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      expect.stringContaining("details"),
+    );
+    const newSearchParams = new URLSearchParams(mockSearchParams.toString());
+    newSearchParams.delete("details");
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      expect.stringContaining(newSearchParams.toString()),
+    );
   });
 });

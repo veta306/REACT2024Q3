@@ -1,19 +1,19 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter, useSearchParams } from "react-router-dom";
 import { Person } from "../../types/Person";
 import Card from ".";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import itemsReducer from "../../features/items/itemsSlice";
 
-const mockSetSearchParams = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useSearchParams: vi.fn(() => [new URLSearchParams(), mockSetSearchParams]),
-  };
-});
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/",
+  useSearchParams: () => mockSearchParams,
+}));
 
 const mockPerson: Person = {
   birth_year: "19BBY",
@@ -37,9 +37,7 @@ describe("Card component", () => {
   it("renders the relevant card data", () => {
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <Card person={mockPerson} />
-        </MemoryRouter>
+        <Card person={mockPerson} />
       </Provider>,
     );
 
@@ -50,28 +48,28 @@ describe("Card component", () => {
     expect(imgElement).toBeInTheDocument();
     expect(imgElement).toHaveAttribute(
       "src",
-      expect.stringContaining("/1.jpg"),
+      expect.stringContaining(
+        "/_next/image?url=https%3A%2F%2Fvieraboschkova.github.io%2Fswapi-gallery%2Fstatic%2Fassets%2Fimg%2Fpeople%2F1.jpg&w=828&q=75",
+      ),
     );
   });
 
   it("opens a detailed card component on click", () => {
-    const [searchParams, setSearchParams] = useSearchParams();
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <Card person={mockPerson} />
-        </MemoryRouter>
+        <Card person={mockPerson} />
       </Provider>,
     );
 
     const cardElement = screen.getByRole("article");
     fireEvent.click(cardElement);
 
-    expect(setSearchParams).toHaveBeenCalled();
-    expect(setSearchParams).toHaveBeenCalledWith(expect.any(Function));
+    expect(mockRouterPush).toHaveBeenCalled();
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      expect.stringContaining("details=1"),
+    );
 
-    searchParams.set("details", "1");
-    mockSetSearchParams.mock.calls[0][0](searchParams);
-    expect(searchParams.toString()).toContain("details=1");
+    mockSearchParams.set("details", "1");
+    expect(mockSearchParams.toString()).toContain("details=1");
   });
 });
