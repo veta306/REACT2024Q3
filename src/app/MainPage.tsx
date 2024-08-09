@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import useSearchPhrase from "../hooks/useSearchPhrase";
 import usePageNumber from "../hooks/usePageNumber";

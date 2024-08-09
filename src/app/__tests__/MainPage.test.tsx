@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
-import MainPage from "../index";
+import MainPage from "../MainPage";
 import {
   useFetchPersonQuery,
   useFetchPeopleQuery,
