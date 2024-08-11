@@ -20,7 +20,7 @@ const MainPage: FC = () => {
   });
 
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main} ${styles[theme]}`}>
       <div className={styles.mainPanel}>
         <SearchSection
           searchPhrase={searchPhrase}

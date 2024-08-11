@@ -1,6 +1,25 @@
+$dark-text-color: rgba(255, 255, 255, 0.87);
+$dark-bg-color: #242424;
+$light-text-color: black;
+$light-bg-color: white;
+
+.light {
+  color-scheme: light;
+  color: $light-text-color;
+  background-color: $light-bg-color;
+}
+
+.dark {
+  color-scheme: dark;
+  color: $dark-text-color;
+  background-color: $dark-bg-color;
+}
+
 .main {
   display: flex;
   gap: 20px;
+  height: 100vh;
+  width: 100%;
 }
 
 .main-panel {
