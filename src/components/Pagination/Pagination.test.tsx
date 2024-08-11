@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import Pagination from ".";
 import usePageNumber from "../../hooks/usePageNumber";
 import { Mock } from "vitest";
@@ -9,21 +8,23 @@ vi.mock("../../hooks/usePageNumber", () => ({
   default: vi.fn(),
 }));
 
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/",
+  useSearchParams: () => mockSearchParams,
+}));
+
 describe("Pagination component", () => {
   it("updates the page number and URL query parameter when 'Next' is clicked", async () => {
     const mockSetPage = vi.fn();
-    const mockCloseDetailedCard = vi.fn();
     (usePageNumber as Mock).mockReturnValue([1, mockSetPage]);
 
     render(
-      <MemoryRouter>
-        <Pagination
-          currentPage={1}
-          hasNextPage={true}
-          setPage={mockSetPage}
-          closeDetailedCard={mockCloseDetailedCard}
-        />
-      </MemoryRouter>,
+      <Pagination currentPage={1} hasNextPage={true} setPage={mockSetPage} />,
     );
 
     const nextButton = screen.getByText("Next");
@@ -36,18 +37,10 @@ describe("Pagination component", () => {
 
   it("updates the page number and URL query parameter when 'Previous' is clicked", async () => {
     const mockSetPage = vi.fn();
-    const mockCloseDetailedCard = vi.fn();
     (usePageNumber as Mock).mockReturnValue([2, mockSetPage]);
 
     render(
-      <MemoryRouter>
-        <Pagination
-          currentPage={2}
-          hasNextPage={true}
-          setPage={mockSetPage}
-          closeDetailedCard={mockCloseDetailedCard}
-        />
-      </MemoryRouter>,
+      <Pagination currentPage={2} hasNextPage={true} setPage={mockSetPage} />,
     );
 
     const prevButton = screen.getByText("Previous");
@@ -59,16 +52,7 @@ describe("Pagination component", () => {
   });
 
   it("disables the 'Previous' button on the first page", () => {
-    render(
-      <MemoryRouter>
-        <Pagination
-          currentPage={1}
-          hasNextPage={true}
-          setPage={() => {}}
-          closeDetailedCard={() => {}}
-        />
-      </MemoryRouter>,
-    );
+    render(<Pagination currentPage={1} hasNextPage={true} setPage={vi.fn()} />);
 
     const prevButton = screen.getByText("Previous");
     expect(prevButton).toBeDisabled();
@@ -76,14 +60,7 @@ describe("Pagination component", () => {
 
   it("disables the 'Next' button when there is no next page", () => {
     render(
-      <MemoryRouter>
-        <Pagination
-          currentPage={1}
-          hasNextPage={false}
-          setPage={() => {}}
-          closeDetailedCard={() => {}}
-        />
-      </MemoryRouter>,
+      <Pagination currentPage={1} hasNextPage={false} setPage={vi.fn()} />,
     );
 
     const nextButton = screen.getByText("Next");

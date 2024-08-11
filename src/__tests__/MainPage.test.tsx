@@ -1,25 +1,43 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import MainPage from ".";
-import { useFetchPeopleQuery } from "../../features/api/apiSlice";
-import useSearchPhrase from "../../hooks/useSearchPhrase";
-import usePageNumber from "../../hooks/usePageNumber";
+import MainPage from "../pages/index";
+import {
+  useFetchPersonQuery,
+  useFetchPeopleQuery,
+} from "../features/api/apiSlice";
+import useSearchPhrase from "../hooks/useSearchPhrase";
+import usePageNumber from "../hooks/usePageNumber";
 import { Mock } from "vitest";
-import { ThemeProvider } from "../../contexts/ThemeContext";
-import itemsReducer from "../../features/items/itemsSlice";
+import { ThemeProvider } from "../contexts/ThemeContext";
+import itemsReducer from "../features/items/itemsSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import { Person } from "../types/Person";
 
-vi.mock("../../features/api/apiSlice", () => ({
-  useFetchPeopleQuery: vi.fn(),
+const mockRouterPush = vi.fn();
+const mockSearchParams = new URLSearchParams();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+  usePathname: () => "/",
+  useSearchParams: () => mockSearchParams,
 }));
 
-vi.mock("../../hooks/useSearchPhrase", () => ({
+vi.mock("../features/api/apiSlice", async (importOriginal) => {
+  const actual: Mock = await importOriginal();
+  return {
+    ...actual,
+    useFetchPeopleQuery: vi.fn(),
+    useFetchPersonQuery: vi.fn(),
+  };
+});
+
+vi.mock("../hooks/useSearchPhrase", () => ({
   __esModule: true,
   default: vi.fn(),
 }));
 
-vi.mock("../../hooks/usePageNumber", () => ({
+vi.mock("../hooks/usePageNumber", () => ({
   __esModule: true,
   default: vi.fn(),
 }));
@@ -29,6 +47,18 @@ const mockStore = configureStore({
     items: itemsReducer,
   },
 });
+
+const mockPerson: Person = {
+  birth_year: "19BBY",
+  eye_color: "blue",
+  gender: "male",
+  hair_color: "blond",
+  height: "172",
+  mass: "77",
+  name: "Luke Skywalker",
+  skin_color: "fair",
+  url: "https://swapi.dev/api/people/1/",
+};
 
 describe("MainPage component", () => {
   beforeEach(() => {
@@ -48,26 +78,35 @@ describe("MainPage component", () => {
       isFetching: true,
     });
 
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
+
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage
+            items={{ results: [], next: null, count: 0, previous: null }}
+            details={mockPerson}
+          />
+        </ThemeProvider>
       </Provider>,
     );
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
     expect(screen.getByText("Search")).toBeInTheDocument();
-    expect(screen.getByText("Throw error")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
   it("fetches and displays people based on searchPhrase and page", async () => {
     const mockSetSearchPhrase = vi.fn();
     const mockSetPage = vi.fn();
     const mockFetchPeople = useFetchPeopleQuery as Mock;
+
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
 
     const mockPeopleResponse = {
       results: [
@@ -101,20 +140,11 @@ describe("MainPage component", () => {
 
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage items={mockPeopleResponse} details={mockPerson} />
+        </ThemeProvider>
       </Provider>,
     );
-
-    await waitFor(() => {
-      expect(mockFetchPeople).toHaveBeenCalledWith({
-        page: 1,
-        searchPhrase: "Skywalker",
-      });
-    });
 
     expect(screen.getByText("Luke Skywalker")).toBeInTheDocument();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
@@ -124,6 +154,11 @@ describe("MainPage component", () => {
     const mockSetSearchPhrase = vi.fn();
     const mockSetPage = vi.fn();
     const mockFetchPeople = useFetchPeopleQuery as Mock;
+
+    (useFetchPersonQuery as Mock).mockReturnValue({
+      data: mockPerson,
+      isFetching: false,
+    });
 
     const mockPeopleResponse = {
       results: [
@@ -154,11 +189,9 @@ describe("MainPage component", () => {
 
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        </MemoryRouter>
+        <ThemeProvider>
+          <MainPage items={mockPeopleResponse} details={mockPerson} />
+        </ThemeProvider>
       </Provider>,
     );
 

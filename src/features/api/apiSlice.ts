@@ -25,6 +25,10 @@ const apiSlice = createApi({
   }),
 });
 
-export const { useFetchPeopleQuery, useFetchPersonQuery } = apiSlice;
+export const {
+  useFetchPeopleQuery,
+  useFetchPersonQuery,
+  util: { getRunningQueriesThunk },
+} = apiSlice;
 
 export default apiSlice;

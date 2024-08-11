@@ -1,14 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import ErrorPage from ".";
-import { MemoryRouter } from "react-router-dom";
+import ErrorPage from "../pages/404";
 
 describe("ErrorPage component", () => {
   it("renders the error page with correct elements", () => {
-    render(
-      <MemoryRouter>
-        <ErrorPage />
-      </MemoryRouter>,
-    );
+    render(<ErrorPage />);
 
     expect(screen.getByText("404")).toBeInTheDocument();
     expect(screen.getByText("Not found")).toBeInTheDocument();

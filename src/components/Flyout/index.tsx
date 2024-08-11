@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { RootState } from "../../store/store";
 import { unselectAllItems } from "../../features/items/itemsSlice";
 import styles from "./Flyout.module.scss";
 import { ThemeContext } from "../../contexts/ThemeContext";
