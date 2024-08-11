@@ -9,17 +9,12 @@ interface Props {
 
 const SearchSection: FC<Props> = ({ searchPhrase, setSearchPhrase }) => {
   const [searchInput, setSearchInput] = useState(searchPhrase);
-  const [errorTriggered, setErrorTriggered] = useState(false);
   const closeDetailedCard = useCloseDetailedCard();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setSearchPhrase(searchInput);
   };
-
-  if (errorTriggered) {
-    throw new Error("Something went wrong");
-  }
 
   return (
     <form
@@ -33,20 +28,8 @@ const SearchSection: FC<Props> = ({ searchPhrase, setSearchPhrase }) => {
         onChange={(e) => setSearchInput(e.target.value)}
         value={searchInput}
       />
-      <button
-        className={`${styles.button} ${styles.searchButton}`}
-        type="submit"
-      >
+      <button className={styles.searchButton} type="submit">
         Search
-      </button>
-      <button
-        className={`${styles.button} ${styles.errorButton}`}
-        type="button"
-        onClick={() => {
-          setErrorTriggered(true);
-        }}
-      >
-        Throw error
       </button>
     </form>
   );

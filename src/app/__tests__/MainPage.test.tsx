@@ -89,7 +89,6 @@ describe("MainPage component", () => {
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
     expect(screen.getByText("Search")).toBeInTheDocument();
-    expect(screen.getByText("Throw error")).toBeInTheDocument();
     expect(screen.getByRole("status")).toBeInTheDocument();
   });
 

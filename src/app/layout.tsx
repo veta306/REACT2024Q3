@@ -12,7 +12,7 @@ export default function RootLayout({
         <title>Star Wars API</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
-      <body className="light">
+      <body>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
