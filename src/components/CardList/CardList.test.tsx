@@ -55,7 +55,7 @@ describe("CardList component", () => {
   it("renders the specified number of cards", () => {
     render(
       <Provider store={store}>
-        <CardList persons={mockPersons} isLoading={false} />
+        <CardList persons={mockPersons} />
       </Provider>,
     );
 
@@ -64,16 +64,9 @@ describe("CardList component", () => {
   });
 
   it("displays the appropriate message if no cards are present", () => {
-    render(<CardList persons={[]} isLoading={false} />);
+    render(<CardList persons={[]} />);
 
     const message = screen.getByText(/no search results/i);
     expect(message).toBeInTheDocument();
-  });
-
-  it("renders the spinner when loading", () => {
-    render(<CardList persons={[]} isLoading={true} />);
-
-    const spinner = screen.getByRole("status");
-    expect(spinner).toBeInTheDocument();
   });
 });

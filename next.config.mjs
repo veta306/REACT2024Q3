@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-  distDir: "./dist",
   webpack: (config) => {
     const rules = config.module.rules
       .find((rule) => typeof rule.oneOf === "object")
@@ -17,7 +15,6 @@ const nextConfig = {
             ...moduleLoader.options,
             modules: {
               ...moduleLoader.options.modules,
-              // This is where we allow camelCase class names
               exportLocalsConvention: "camelCase",
             },
           };
@@ -27,8 +24,15 @@ const nextConfig = {
 
     return config;
   },
+
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "vieraboschkova.github.io",
+        port: "",
+      },
+    ],
   },
 };
 

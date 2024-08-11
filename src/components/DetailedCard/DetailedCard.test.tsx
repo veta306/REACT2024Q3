@@ -37,7 +37,7 @@ describe("DetailedCard component", () => {
       isFetching: false,
     });
 
-    render(<DetailedCard />);
+    render(<DetailedCard person={mockPerson} />);
     await waitFor(() => {
       expect(screen.getByText(mockPerson.name)).toBeInTheDocument();
       expect(
@@ -70,7 +70,7 @@ describe("DetailedCard component", () => {
       isFetching: false,
     });
 
-    render(<DetailedCard />);
+    render(<DetailedCard person={mockPerson} />);
 
     await waitFor(() => {
       expect(screen.getByText(mockPerson.name)).toBeInTheDocument();

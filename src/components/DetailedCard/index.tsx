@@ -1,24 +1,24 @@
 import { FC } from "react";
 import { useSearchParams } from "next/navigation";
-import { useFetchPersonQuery } from "../../features/api/apiSlice";
-import { skipToken } from "@reduxjs/toolkit/query/react";
-import Spinner from "../Spinner";
 import styles from "./DetailedCard.module.scss";
 import useCloseDetailedCard from "../../hooks/useCloseDetailedCard";
 import Image from "next/image";
+import { Person } from "../../types/Person";
 
-const DetailedCard: FC = () => {
+interface Props {
+  person: Person | undefined;
+}
+
+const DetailedCard: FC<Props> = ({ person }) => {
   const searchParams = useSearchParams();
   const id = searchParams.get("details");
   const handleClose = useCloseDetailedCard();
-
-  const { data: person, isFetching } = useFetchPersonQuery(id || skipToken);
 
   return (
     <>
       {id && (
         <div className={styles.details}>
-          {!isFetching && person && (
+          {person && (
             <>
               <button className={styles.closeButton} onClick={handleClose}>
                 ×
@@ -39,7 +39,6 @@ const DetailedCard: FC = () => {
               <p>Skin Color: {person.skin_color}</p>
             </>
           )}
-          {isFetching && <Spinner />}
         </div>
       )}
     </>

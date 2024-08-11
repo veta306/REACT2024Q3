@@ -38,8 +38,11 @@ const Card: FC<Props> = ({ person }) => {
         width={400}
         height={550}
       />
-      <div className={styles.name}>{person.name}</div>
+      <label htmlFor={id} className={styles.name}>
+        {person.name}
+      </label>
       <input
+        id={id}
         className={styles.checkbox}
         type="checkbox"
         checked={isSelected}
