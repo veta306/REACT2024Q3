@@ -19,11 +19,10 @@ const ControlledForm: FC = () => {
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({ resolver: yupResolver(formSchema), mode: "onChange" });
 
   const onSubmit = async (data: RawData) => {
-    console.log(data);
     const imageBase64 = await imageToBase64(
       data.files instanceof FileList ? data.files[0] : data.files,
     );
@@ -110,7 +109,9 @@ const ControlledForm: FC = () => {
           />
           {errors.terms && <p>{errors.terms.message}</p>}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={!isValid}>
+          Submit
+        </button>
       </form>
     </>
   );

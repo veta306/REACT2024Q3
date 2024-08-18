@@ -47,14 +47,6 @@ form {
     &:hover {
       background-color: #0056b3;
     }
-
-    &:disabled {
-      background-color: gray;
-      cursor: default;
-    }
-    &:disabled:hover {
-      background-color: gray;
-    }
   }
 }
 

@@ -9,7 +9,9 @@ export const formSchema = yup.object().shape({
   age: yup
     .number()
     .transform((value, originalValue) =>
-      originalValue.trim() === "" ? undefined : value,
+      originalValue instanceof String && originalValue.trim() === ""
+        ? undefined
+        : value,
     )
     .required("Age is required")
     .integer("Age must be integer")

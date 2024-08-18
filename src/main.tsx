@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import MainPage from "./pages/MainPage/MainPage";
 import "./index.css";
 import ControlledForm from "./pages/Controlled/ControlledForm";
+import UncontrolledForm from "./pages/Uncontrolled/UncontrolledForm";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/uncontrolled",
+    element: <UncontrolledForm />,
   },
 ]);
 
