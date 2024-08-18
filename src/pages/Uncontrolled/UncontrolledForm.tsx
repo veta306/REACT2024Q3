@@ -61,7 +61,6 @@ const UncontrolledForm: FC = () => {
       dispatch(submitForm(convertedData));
       navigate("/");
     } catch (errors) {
-      console.log(errors);
       if (errors instanceof yup.ValidationError) {
         const formErrors: Errors = {};
         errors.inner.forEach((error) => {
